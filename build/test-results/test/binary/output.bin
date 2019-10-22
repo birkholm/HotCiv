@@ -1,0 +1,9 @@
+before move
+[2,0] archer RED
+[3,2] legion BLUE
+[4,3] settler RED
+after move
+[7,5] archer RED
+[3,2] legion BLUE
+[4,3] settler RED
+---------------

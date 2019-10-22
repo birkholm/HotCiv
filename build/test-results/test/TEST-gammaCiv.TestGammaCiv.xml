@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="gammaCiv.TestGammaCiv" tests="3" skipped="0" failures="0" errors="0" timestamp="2019-10-19T10:08:58" hostname="Michaels-MBP" time="0.073">
+  <properties/>
+  <testcase name="removeArchersFortify" classname="gammaCiv.TestGammaCiv" time="0.059"/>
+  <testcase name="settlerShouldBuildCity" classname="gammaCiv.TestGammaCiv" time="0.004"/>
+  <testcase name="archerShouldFortify" classname="gammaCiv.TestGammaCiv" time="0.003"/>
+  <system-out><![CDATA[before move
+[2,0] archer RED
+[3,2] legion BLUE
+[4,3] settler RED
+after move
+[7,5] archer RED
+[3,2] legion BLUE
+[4,3] settler RED
+---------------
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
