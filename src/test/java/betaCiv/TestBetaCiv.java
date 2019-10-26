@@ -4,11 +4,13 @@ import common.*;
 import org.junit.Before;
 import org.junit.Test;
 import variants.alphaCiv.AlphaActionStrategy;
+import variants.alphaCiv.AlphaMapStrategy;
 import variants.alphaCiv.AlphaMoveStrategy;
 import variants.betaCiv.BetaAgeStrategy;
 import variants.betaCiv.BetaWinnerStrategy;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class TestBetaCiv {
     private Game game;
@@ -19,14 +21,14 @@ public class TestBetaCiv {
      */
     @Before
     public void setUp() {
-        game = new GameImpl(new BetaWinnerStrategy(), new BetaAgeStrategy(), new AlphaActionStrategy(), new AlphaMoveStrategy());
+        game = new GameImpl(new BetaWinnerStrategy(), new BetaAgeStrategy(), new AlphaActionStrategy(), new AlphaMoveStrategy(), new AlphaMapStrategy());
         constants = new GameConstants();
     }
 
     @Test
     public void shouldHaveBlueAsWinner() {
 
-        assertEquals(null, game.getWinner());
+        assertNull(game.getWinner());
         game.endOfTurn();//red ends turn
         //blue attacks red´s city and wins the game
         game.moveUnit(new Position(3, 2), new Position(1, 1));

@@ -2,16 +2,17 @@ package common;
 
 public class CityImpl implements City {
 
-    Player owner;
-    String production;
+    private Player owner;
+    private String production;
 
     GameConstants constants = new GameConstants();
 
-    int treasure = 0;
-    int size = 0;
+    private int treasure = 0;
+    private int size = 0;
 
     public CityImpl(Player owner) {
         this.owner = owner;
+        this.production = "none";
     }
 
     @Override

@@ -4,12 +4,12 @@ import common.*;
 import org.junit.Before;
 import org.junit.Test;
 import variants.alphaCiv.AlphaAgeStrategy;
+import variants.alphaCiv.AlphaMapStrategy;
 import variants.alphaCiv.AlphaWinnerStrategy;
 import variants.gammaCiv.GammaActionStrategy;
 import variants.gammaCiv.GammaMoveStrategy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class TestGammaCiv {
     private Game game;
@@ -20,8 +20,7 @@ public class TestGammaCiv {
      */
     @Before
     public void setUp() {
-        //game = new GameImpl(new BetaWinnerStrategy(), new BetaAgeStrategy());
-        game = new GameImpl(new AlphaWinnerStrategy(), new AlphaAgeStrategy(), new GammaActionStrategy(), new GammaMoveStrategy());
+        game = new GameImpl(new AlphaWinnerStrategy(), new AlphaAgeStrategy(), new GammaActionStrategy(), new GammaMoveStrategy(), new AlphaMapStrategy());
         constants = new GameConstants();
     }
 
@@ -48,10 +47,10 @@ public class TestGammaCiv {
         game.performUnitActionAt(position);
         assertEquals(6, game.getUnitAt(position).getDefensiveStrength());
 
-        assertEquals(true, game.getUnitAt(position).isFortify());
+        assertTrue(game.getUnitAt(position).isFortify());
 
         //not possible to move a fortify unit
-        assertEquals(false, game.moveUnit(position, new Position(7, 5)));
+        assertFalse(game.moveUnit(position, new Position(7, 5)));
     }
 
     @Test
@@ -64,9 +63,9 @@ public class TestGammaCiv {
         game.performUnitActionAt(position);
         assertEquals(3, game.getUnitAt(position).getDefensiveStrength());
 
-        assertEquals(false, game.getUnitAt(position).isFortify());
+        assertFalse(game.getUnitAt(position).isFortify());
 
-        assertEquals(true, game.moveUnit(position, new Position(7, 5)));
+        assertTrue(game.moveUnit(position, new Position(7, 5)));
     }
 
 

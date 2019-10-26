@@ -3,13 +3,9 @@ package alphaCiv;
 import common.*;
 import org.junit.Before;
 import org.junit.Test;
-import variants.alphaCiv.AlphaActionStrategy;
-import variants.alphaCiv.AlphaAgeStrategy;
-import variants.alphaCiv.AlphaMoveStrategy;
-import variants.alphaCiv.AlphaWinnerStrategy;
+import variants.alphaCiv.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Skeleton class for alphaCiv test cases
@@ -46,7 +42,7 @@ public class TestAlphaCiv {
      */
     @Before
     public void setUp() {
-        game = new GameImpl(new AlphaWinnerStrategy(), new AlphaAgeStrategy(), new AlphaActionStrategy(), new AlphaMoveStrategy());
+        game = new GameImpl(new AlphaWinnerStrategy(), new AlphaAgeStrategy(), new AlphaActionStrategy(), new AlphaMoveStrategy(), new AlphaMapStrategy());
         constants = new GameConstants();
     }
 
@@ -99,17 +95,17 @@ public class TestAlphaCiv {
 
     @Test
     public void shouldBePossibleToMoveAtPlain() {
-        assertEquals(true, game.moveUnit(new Position(2, 0), new Position(3, 0)));
+        assertTrue(game.moveUnit(new Position(2, 0), new Position(3, 0)));
     }
 
     @Test
     public void shouldNotBePossibleToMoveOverMountains() {
-        assertEquals(false, game.moveUnit(new Position(3, 2), new Position(2, 2)));
+        assertFalse(game.moveUnit(new Position(3, 2), new Position(2, 2)));
     }
 
     @Test
     public void redCannotMoveBlueUnits() {
-        assertEquals(false, game.moveUnit(new Position(3, 2), new Position(3, 3)));
+        assertFalse(game.moveUnit(new Position(3, 2), new Position(3, 3)));
     }
 
     @Test
@@ -150,7 +146,7 @@ public class TestAlphaCiv {
     public void redWinsAtAge3000() {
         //start age = -4000 = 4000BC
         assertEquals(-4000, game.getAge());
-        assertEquals(null, game.getWinner());
+        assertNull(game.getWinner());
         game.endOfTurn(); //current 4000
         game.endOfTurn(); //3900
         game.endOfTurn(); //3900
@@ -192,7 +188,7 @@ public class TestAlphaCiv {
 
     @Test
     public void shouldNotBePossibleToMoveToOwnColor() {
-        assertEquals(false, game.moveUnit(new Position(2, 0), new Position(4, 3)));
+        assertFalse(game.moveUnit(new Position(2, 0), new Position(4, 3)));
     }
 
     @Test
@@ -210,7 +206,7 @@ public class TestAlphaCiv {
     @Test
     public void citiesShouldProduceUnitsAndPlaceThem() {
         //make red produce archer and place it at the city
-        assertEquals(null, game.getUnitAt(new Position(1, 1)));
+        assertNull(game.getUnitAt(new Position(1, 1)));
         game.changeProductionInCityAt(new Position(1, 1), GameConstants.ARCHER);
         game.endOfTurn(); // red production = 0
         game.endOfTurn(); // red production = 6

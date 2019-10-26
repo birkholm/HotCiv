@@ -32,27 +32,28 @@ import java.util.Map;
 
 public class GameImpl implements Game {
 
-    Map<Position, Tile> tileMap = new HashMap<>();
-    Map<Position, Unit> unitMap = new HashMap<>();
-    Map<Position, City> cityMap = new HashMap<>();
+    private Map<Position, Tile> tileMap = new HashMap<>();
+    private Map<Position, Unit> unitMap = new HashMap<>();
+    private Map<Position, City> cityMap = new HashMap<>();
 
     GameConstants constants = new GameConstants();
 
-    Map<Player, Boolean> playerTurns = new HashMap<>();
+    private Map<Player, Boolean> playerTurns = new HashMap<>();
 
-    Player playerInTurn;
+    private Player playerInTurn;
 
-    int age;
+    private int age;
 
-    WinnerStrategy winnerStrategy;
-    AgeStrategy ageStrategy;
-    ActionStrategy actionStrategy;
-    MoveStrategy moveStrategy;
+    private WinnerStrategy winnerStrategy;
+    private AgeStrategy ageStrategy;
+    private ActionStrategy actionStrategy;
+    private MoveStrategy moveStrategy;
+    private MapStrategy mapStrategy;
 
 
-    public GameImpl(WinnerStrategy winnerStrategy, AgeStrategy ageStrategy, ActionStrategy actionStrategy, MoveStrategy moveStrategy) {
-        initializeTileMap();
-        initializeUnitMap();
+    public GameImpl(WinnerStrategy winnerStrategy, AgeStrategy ageStrategy, ActionStrategy actionStrategy, MoveStrategy moveStrategy, MapStrategy mapStrategy) {
+        //initializeTileMap();
+        //initializeUnitMap();
         this.playerInTurn = Player.RED;
         this.age = -4000;
         resetPlayerTurns();
@@ -60,6 +61,9 @@ public class GameImpl implements Game {
         this.ageStrategy = ageStrategy;
         this.actionStrategy = actionStrategy;
         this.moveStrategy = moveStrategy;
+        this.mapStrategy = mapStrategy;
+
+        mapStrategy.generateMap(tileMap, unitMap, cityMap);
 
     }
 
@@ -111,12 +115,11 @@ public class GameImpl implements Game {
         }
 
         //do not move over mountains or oceans
-        if ((tileMap.get(to).getTypeString() == GameConstants.MOUNTAINS) || (tileMap.get(to).getTypeString() == GameConstants.OCEANS)) {
+        if ((tileMap.get(to).getTypeString().equals(GameConstants.MOUNTAINS)) || (tileMap.get(to).getTypeString().equals(GameConstants.OCEANS))) {
             return false;
         }
 
         System.out.println("before move");
-        printUnits();
 
         //move unit
         if (getPlayerInTurn() == unitMap.get(from).getOwner()) {
@@ -157,7 +160,6 @@ public class GameImpl implements Game {
   */
 
         System.out.println("after move");
-        printUnits();
         System.out.println("---------------");
         return true;
 
@@ -173,6 +175,7 @@ public class GameImpl implements Game {
         for (Map.Entry<Player, Boolean> entry : playerTurns.entrySet()) {
             if (entry.getValue()) {
                 eor = false;
+                break;
             }
 
         }
@@ -194,7 +197,8 @@ public class GameImpl implements Game {
             //C
             for (Map.Entry<Position, City> entry : cityMap.entrySet()) {
                 int treasure = entry.getValue().getTreasure();
-                if (entry.getValue().getProduction() == GameConstants.ARCHER) {
+
+                if (entry.getValue().getProduction().equals(GameConstants.ARCHER)) {
                     if (treasure >= 10) {
                         treasure -= 10;
                         entry.getValue().setTreasure(treasure);
@@ -285,7 +289,7 @@ public class GameImpl implements Game {
     private boolean tryPositionCandidate(Position position) {
 
         //must not be ocean or hills
-        if ((tileMap.get(position).getTypeString() != GameConstants.HILLS) && (tileMap.get(position).getTypeString() != GameConstants.OCEANS)) {
+        if ((!tileMap.get(position).getTypeString().equals(GameConstants.HILLS)) && (!tileMap.get(position).getTypeString().equals(GameConstants.OCEANS))) {
             //there must not be a unit
             return unitMap.get(position) == null;
         } else {
@@ -304,46 +308,6 @@ public class GameImpl implements Game {
     public void performUnitActionAt(Position p) {
 
         actionStrategy.performAction(p, unitMap, cityMap);
-    }
-
-    private void initializeTileMap() {
-        for (int i = 0; i < GameConstants.WORLDSIZE; i++) {
-            for (int j = 0; j < GameConstants.WORLDSIZE; j++) {
-
-                //place cities
-                if (i == 1 && j == 1) {
-                    cityMap.put(new Position(i, j), new CityImpl(Player.RED));
-                } else if (i == 4 && j == 1) {
-                    cityMap.put(new Position(i, j), new CityImpl(Player.BLUE));
-                }
-
-                //place Tiles
-                if (i == 1 && j == 0) {
-                    tileMap.put(new Position(i, j), new TileImpl(GameConstants.OCEANS));
-                } else if (i == 0 && j == 1) {
-                    tileMap.put(new Position(i, j), new TileImpl(GameConstants.HILLS));
-                } else if (i == 2 && j == 2) {
-                    tileMap.put(new Position(i, j), new TileImpl(GameConstants.MOUNTAINS));
-                } else {
-                    tileMap.put(new Position(i, j), new TileImpl(GameConstants.PLAINS));
-                }
-            }
-        }
-    }
-
-    private void initializeUnitMap() {
-        //place units
-        unitMap.put(new Position(2, 0), new UnitImpl(GameConstants.ARCHER, Player.RED));
-        unitMap.put(new Position(3, 2), new UnitImpl(GameConstants.LEGION, Player.BLUE));
-        unitMap.put(new Position(4, 3), new UnitImpl(GameConstants.SETTLER, Player.RED));
-    }
-
-    public void printMap() {
-        tileMap.forEach((key, value) -> System.out.println(key + " " + value));
-    }
-
-    public void printUnits() {
-        unitMap.forEach((key, value) -> System.out.println(key + " " + value.getTypeString() + " " + value.getOwner()));
     }
 
 }
