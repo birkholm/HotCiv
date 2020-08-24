@@ -35,6 +35,8 @@ public class TestGammaCiv {
         assertNotNull(game.getCityAt(position));
         assertEquals(Player.RED, game.getCityAt(position).getOwner());
         assertEquals(1, game.getCityAt(position).getSize());
+        //the settler should be removed from the position
+        assertEquals(false, (GameConstants.SETTLER.equals(game.getUnitAt(position))));
     }
 
     @Test
