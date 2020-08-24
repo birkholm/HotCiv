@@ -23,6 +23,6 @@ public class TestEpsilonCiv {
 
     @Test
     public void shouldWinAfter3Attacks()    {
-        
+
     }
 }
